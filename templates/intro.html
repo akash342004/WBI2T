@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Your Image</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('static/images/background2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-text {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            color: white;
+            font-size: 20px;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .file-upload {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 40px 20px;
+            border: 3px dashed #4facfe;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .file-upload-label:hover {
+            border-color: #00f2fe;
+            background: rgba(79, 172, 254, 0.05);
+            transform: scale(1.02);
+        }
+
+        .file-upload-label.dragover {
+            background: rgba(79, 172, 254, 0.1);
+            border-color: #00f2fe;
+        }
+
+        .file-upload-label i {
+            font-size: 48px;
+            color: #4facfe;
+            margin-bottom: 15px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label span {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .file-upload-label small {
+            display: block;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 172, 254, 0.3);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(74, 172, 254, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: all 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            color: #4facfe;
+            font-weight: 600;
+            font-size: 16px;
+            display: none;
+        }
+
+        .upload-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Upload Your Image</h1>
+    <p>We'll extract text and prepare professional documents automatically</p>
+
+    <div class="container">
+        <form action="/langauge_detect" method="POST" enctype="multipart/form-data">
+            <label for="file" class="upload-area">
+                <div class="upload-icon">
+                    <label class="file-upload-label" id="drop-zone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Click to upload or drag & drop</span>
+                        <small>Supported formats: PNG, JPG, JPEG, BMP</small>
+                    </label>
+
+                    <input type="file" name="file" id="file" accept=".png, .jpg, .jpeg, .bmp">
+                    <div class="file-name" id="file-name"></div>
+                </div>
+                <input type="file" name="file" id="file" accept=".png, .jpg, .jpeg, .bmp">
+            </label>
+            <button class="button">Extract Text</button>
+        </form>
+    </div>
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('file');
+        const fileName = document.getElementById('file-name');
+        const dropZone = document.getElementById('drop-zone');
+
+        // Show file name when selected
+        fileInput.addEventListener('change', function(e) {
+            if (this.files.length) {
+                fileName.textContent = this.files[0].name;
+                fileName.style.display = 'block';
+            }
+        });
+
+        // Drag & drop handling
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(files[0]);
+                fileInput.files = dataTransfer.files;
+                
+                fileName.textContent = files[0].name;
+                fileName.style.display = 'block';
+            }
+        });
+
+        // Click handler for drop zone
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+    </script>
+</body>
+</html>
