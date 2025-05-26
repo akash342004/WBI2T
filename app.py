@@ -1,3 +1,16 @@
+import os
+import random
+
+# Handle missing /dev/urandom (Render issue with random_device)
+if not os.path.exists('/dev/urandom'):
+    random.seed(42)
+    os.environ['PYTHONHASHSEED'] = '42'
+
+# Use non-GUI backend for matplotlib to avoid runtime issues
+import matplotlib
+matplotlib.use('Agg')
+
+
 from flask import Flask, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
 import tensorflow as tf
@@ -265,5 +278,6 @@ def text():
     save_text_to_text_file(global_text)
     return render_template("close.html")
 
-if __name__ == "__main__":
-    app.run(debug=False)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
